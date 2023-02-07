@@ -87,20 +87,6 @@ class MyGLRender() : GLSurfaceView.Renderer {
     }
 
     override fun onDrawFrame(unused: GL10) {
-/*
-        Matrix.frustumM(projectionMatrix, 0, -1.0f, 1f, -1f, 1f, 2f, 10f)
-
-        // Set the camera position (View matrix)
-        Matrix.setLookAtM(
-            viewMatrix,
-            0,
-            cameraPos[0], cameraPos[1], cameraPos[2],
-            cameraFront[0], cameraFront[1], cameraFront[2],
-            cameraUp[0], cameraUp[1], cameraUp[2],
-        )
-        Matrix.rotateM(viewMatrix, 0, rad[0], 0.0f, 1.0f, 0f)
-        Matrix.rotateM(viewMatrix, 0, rad[1], 1.0f, 0.0f, 0f)
- */
         // Redraw background color
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT)
         box.draw(projectionMatrix, viewMatrix)
