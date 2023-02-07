@@ -11,15 +11,49 @@ class Box {
 
     private val color = floatArrayOf(0.35f, 0.4224f, 0.2322f, 1.0f)
     private val triangleCoords = floatArrayOf(
-        // in counterclockwise order:
-        0f, 0.5f, 0.0f,      // top
-        -0.5f, -0.5f, 0.0f,    // bottom left
-        0.5f, -0.5f, 0.0f,      // bottom right
+        -1.0f, 1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f, 1.0f, -1.0f,
+        -1.0f, 1.0f, -1.0f,
 
-//        -0.5f, 1.0f, 0.0f,      // top
-//        0.5f, 0.0f, 0.0f,      // bottom right
-//        0.5f, 1.0f, 0.0f,    // top left
-    )
+        -1.0f, -1.0f, 1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, 1.0f, -1.0f,
+        -1.0f, 1.0f, -1.0f,
+        -1.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f,
+
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+
+        -1.0f, -1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f,
+
+        -1.0f, 1.0f, -1.0f,
+        1.0f, 1.0f, -1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f, -1.0f,
+
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f, 1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f
+
+        )
 
     private val vertexBuffer: FloatBuffer =
         // (number of coordinate values * 4 bytes per float)
@@ -44,7 +78,7 @@ class Box {
         program = Assets.createProgram(R.raw.box_vert, R.raw.box_frag)
     }
 
-    fun draw(mvpMatrix: FloatArray, viewPos: FloatArray) {
+    fun draw(projection: FloatArray, viewPos: FloatArray) {
         GLES30.glUseProgram(program)
 
         GLES30.glVertexAttribPointer(
@@ -64,13 +98,13 @@ class Box {
         }
 
         // get handle to fragment viewPos member
-        GLES30.glGetUniformLocation(program, "viewPos").also { handle ->
-            GLES30.glUniform3fv(handle, 1, viewPos, 0)
+        GLES30.glGetUniformLocation(program, "viewPos").also {
+            GLES30.glUniformMatrix4fv(it, 1,false, viewPos, 0)
         }
         // get handle to shape's transformation matrix
-        GLES30.glGetUniformLocation(program, "uMVPMatrix").also {
+        GLES30.glGetUniformLocation(program, "projection").also {
             // Pass the projection and view transformation to the shader
-            GLES30.glUniformMatrix4fv(it, 1, false, mvpMatrix, 0)
+            GLES30.glUniformMatrix4fv(it, 1, false, projection, 0)
         }
 
 

@@ -1,12 +1,12 @@
 #version 300 es
 
-//attribute vec4 vPosition;
-layout (location = 0) in vec4 vPosition;
+layout (location = 0) in vec3 vPosition;
 
-uniform mat4 uMVPMatrix;
+uniform mat4 projection;
 uniform mat4 viewPos;
 
 void main() {
-    gl_Position = vPosition;
-//    gl_Position = uMVPMatrix * viewPos * vPosition;
+    //    gl_Position = vec4(vPosition,1.0);
+//    gl_Position = viewPos * vec4(vPosition, 1.0);
+        gl_Position = projection * viewPos * vec4(vPosition, 1.0);
 }

@@ -26,10 +26,18 @@ class MyGLRender() : GLSurfaceView.Renderer {
     private val mSurfaceCreatedLatch: CountDownLatch = CountDownLatch(1)
 
     private val projectionMatrix = FloatArray(16) { 1f }
-    private val viewMatrix = FloatArray(16) { 1f }
+//    private val viewMatrix = FloatArray(16) { 1f }
+    private val viewMatrix = floatArrayOf(
+    1f,0f,0f,0f,
+    0f,1f,0f,0f,
+    0f,0f,1f,0f,
+    0f,0f,0f,1f,)
 
-    private val cameraPos = floatArrayOf(0.0f, 0f, -2f)
-    private val cameraFront = floatArrayOf(0.0f, 0.0f, 10.0f)
+    // 摄像机的位置坐标
+    private val cameraPos = floatArrayOf(0.0f, 0f, 10f)
+    // 摄像机目标的坐标
+    private val cameraFront = floatArrayOf(0.0f, 0.0f, 0.0f)
+    // 摄像机的up方向
     private val cameraUp = floatArrayOf(0.0f, 1.0f, 0.0f)
     private var rad = floatArrayOf(0.0f, 0.0f)
 
@@ -84,7 +92,8 @@ class MyGLRender() : GLSurfaceView.Renderer {
     }
 
     override fun onDrawFrame(unused: GL10) {
-        Matrix.frustumM(projectionMatrix, 0, -0.1f, 0.1f, -0.1f, 0.1f, 0.1f, 10f)
+/*
+        Matrix.frustumM(projectionMatrix, 0, -1.0f, 1f, -1f, 1f, 2f, 10f)
 
         // Set the camera position (View matrix)
         Matrix.setLookAtM(
@@ -96,8 +105,7 @@ class MyGLRender() : GLSurfaceView.Renderer {
         )
         Matrix.rotateM(viewMatrix, 0, rad[0], 0.0f, 1.0f, 0f)
         Matrix.rotateM(viewMatrix, 0, rad[1], 1.0f, 0.0f, 0f)
-
-
+ */
         // Redraw background color
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT)
         box.draw(projectionMatrix, viewMatrix)
@@ -110,10 +118,15 @@ class MyGLRender() : GLSurfaceView.Renderer {
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
         GLES30.glViewport(0, 0, width, height)
-//        val ratio: Float = width.toFloat() / height.toFloat()
+        val ratio: Float = width.toFloat() / height.toFloat()
 //         this projection matrix is applied to object coordinates
-//         in the onDrawFrame() method
-//        val projection = FloatArray(16)
-//        Matrix.frustumM(projection, 0, -ratio, ratio, -1f, 1f, 3f, 700f)
+        Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 700f)
+        Matrix.setLookAtM(
+            viewMatrix,
+            0,
+            cameraPos[0], cameraPos[1], cameraPos[2],
+            cameraFront[0], cameraFront[1], cameraFront[2],
+            cameraUp[0], cameraUp[1], cameraUp[2],
+        )
     }
 }
