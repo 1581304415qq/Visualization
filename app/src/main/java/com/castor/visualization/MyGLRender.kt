@@ -26,15 +26,10 @@ class MyGLRender() : GLSurfaceView.Renderer {
     private val mSurfaceCreatedLatch: CountDownLatch = CountDownLatch(1)
 
     private val projectionMatrix = FloatArray(16) { 1f }
-//    private val viewMatrix = FloatArray(16) { 1f }
-    private val viewMatrix = floatArrayOf(
-    1f,0f,0f,0f,
-    0f,1f,0f,0f,
-    0f,0f,1f,0f,
-    0f,0f,0f,1f,)
+    private val viewMatrix = FloatArray(16) { 1f }
 
     // 摄像机的位置坐标
-    private val cameraPos = floatArrayOf(0.0f, 0f, 10f)
+    private val cameraPos = floatArrayOf(3.0f, 5f, 10f)
     // 摄像机目标的坐标
     private val cameraFront = floatArrayOf(0.0f, 0.0f, 0.0f)
     // 摄像机的up方向

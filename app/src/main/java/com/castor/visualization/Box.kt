@@ -53,7 +53,7 @@ class Box {
         -1.0f, -1.0f, 1.0f,
         1.0f, -1.0f, 1.0f
 
-        )
+    )
 
     private val vertexBuffer: FloatBuffer =
         // (number of coordinate values * 4 bytes per float)
@@ -70,7 +70,6 @@ class Box {
         }
 
     private val vertexCount: Int = triangleCoords.size / COORDS_PER_VERTEX
-    private val vertexStride: Int = COORDS_PER_VERTEX * 4 // 4 bytes per vertex
 
     private var program: Int = -1
 
@@ -93,20 +92,19 @@ class Box {
 
         // get handle to fragment shader's vColor member
         GLES30.glGetUniformLocation(program, "vColor").also {
-            // Set color for drawing the triangle
             GLES30.glUniform4fv(it, 1, color, 0)
         }
 
+        // 视图矩阵
         // get handle to fragment viewPos member
         GLES30.glGetUniformLocation(program, "viewPos").also {
-            GLES30.glUniformMatrix4fv(it, 1,false, viewPos, 0)
+            GLES30.glUniformMatrix4fv(it, 1, false, viewPos, 0)
         }
+        // 投影矩阵
         // get handle to shape's transformation matrix
         GLES30.glGetUniformLocation(program, "projection").also {
-            // Pass the projection and view transformation to the shader
             GLES30.glUniformMatrix4fv(it, 1, false, projection, 0)
         }
-
 
         // Draw the triangle
         GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, vertexCount)
