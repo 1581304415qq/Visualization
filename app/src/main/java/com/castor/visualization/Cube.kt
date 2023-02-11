@@ -8,7 +8,7 @@ import java.nio.FloatBuffer
 
 const val COORDS_PER_VERTEX = 3
 
-class Box {
+class Cube {
     private val color = floatArrayOf(0.35f, 0.4224f, 0.2322f, 1.0f)
     private val triangleCoords = floatArrayOf(
         -1.0f, 1.0f, -1.0f,

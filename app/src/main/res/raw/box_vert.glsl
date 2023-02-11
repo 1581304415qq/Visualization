@@ -8,9 +8,9 @@ uniform mat4 model;
 
 out vec3 pos;
 void main() {
+    pos = vPosition.xyz;
 //    gl_Position = vPosition;
 //    gl_Position = viewPos * vPosition;
-    pos = vPosition.xyz;
 //    gl_Position = projection * viewPos * vPosition;
     gl_Position = projection * viewPos * model * vPosition;
 }
