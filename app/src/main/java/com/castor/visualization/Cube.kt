@@ -8,72 +8,85 @@ import java.nio.FloatBuffer
 
 const val COORDS_PER_VERTEX = 3
 
-class Cube {
-    private val color = floatArrayOf(0.35f, 0.4224f, 0.2322f, 1.0f)
-    private val triangleCoords = floatArrayOf(
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, 1.0f, -1.0f,
-        -1.0f, 1.0f, -1.0f,
+class Cube(
+    width: Float = 1f,
+    depth: Float = 1f,
+    height: Float = 1f,
+    x: Float = 0f,
+    y: Float = 0f,
+    z: Float = 0f
+) {
+    private val color = floatArrayOf(0.55f, 0.6224f, 0.7322f, 1.0f)
+    private val w2 = width / 2
+    private val d2 = depth / 2
+    private val h2 = height / 2
+    private val triangleCoordinates = floatArrayOf(// back
+        -w2, h2, -d2,
+        -w2, -h2, -d2,
+        w2, -h2, -d2,
+        w2, -h2, -d2,
+        w2, h2, -d2,
+        -w2, h2, -d2,
 
-        -1.0f, -1.0f, 1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f,
+        -w2, -h2, d2,
+        -w2, -h2, -d2,
+        -w2, h2, -d2,
+        -w2, h2, -d2,
+        -w2, h2, d2,
+        -w2, -h2, d2,
 
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
+        w2, -h2, -d2,
+        w2, -h2, d2,
+        w2, h2, d2,
+        w2, h2, d2,
+        w2, h2, -d2,
+        w2, -h2, -d2,
 
-        -1.0f, -1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, -1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f,
+        -w2, -h2, d2,
+        -w2, h2, d2,
+        w2, h2, d2,
+        w2, h2, d2,
+        w2, -h2, d2,
+        -w2, -h2, d2,
 
-        -1.0f, 1.0f, -1.0f,
-        1.0f, 1.0f, -1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, -1.0f,
+        -w2, h2, -d2,
+        w2, h2, -d2,
+        w2, h2, d2,
+        w2, h2, d2,
+        -w2, h2, d2,
+        -w2, h2, -d2,
 
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f, 1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f, 1.0f,
-        1.0f, -1.0f, 1.0f
-
+        -w2, -h2, -d2,
+        -w2, -h2, d2,
+        w2, -h2, -d2,
+        w2, -h2, -d2,
+        -w2, -h2, d2,
+        w2, -h2, d2
     )
 
     private val vertexBuffer: FloatBuffer =
         // (number of coordinate values * 4 bytes per float)
-        ByteBuffer.allocateDirect(triangleCoords.size * 4).run {
+        ByteBuffer.allocateDirect(triangleCoordinates.size * 4).run {
             // use the device hardware's native byte order
             order(ByteOrder.nativeOrder())
             // create a floating point buffer from the ByteBuffer
             asFloatBuffer().apply {
                 // add the coordinates to the FloatBuffer
-                put(triangleCoords)
+                put(triangleCoordinates)
                 // set the buffer to read the first coordinate
                 position(0)
             }
         }
 
-    private val vertexCount: Int = triangleCoords.size / COORDS_PER_VERTEX
+    private val vertexCount: Int = triangleCoordinates.size / COORDS_PER_VERTEX
 
     private var program: Int = -1
 
-    val angles = FloatArray(3) { 0f }
+    var angles = FloatArray(3) { 0f }
+
+    var angleX: Float
+        set(value) = angles.set(0, value)
+        get() = angles[0]
 
     init {
         program = Assets.createProgram(R.raw.box_vert, R.raw.box_frag)

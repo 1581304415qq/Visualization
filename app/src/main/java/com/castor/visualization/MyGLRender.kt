@@ -29,14 +29,16 @@ class MyGLRender() : GLSurfaceView.Renderer {
     private val viewMatrix = FloatArray(16) { 1f }
 
     // 摄像机的位置坐标
-    private val cameraPos = floatArrayOf(0.0f, 0f, 10f)
+    private val cameraPos = floatArrayOf(0.0f, 0f, 6f)
+
     // 摄像机目标的坐标
     private val cameraFront = floatArrayOf(0.0f, 0.0f, 0.0f)
+
     // 摄像机的up方向
     private val cameraUp = floatArrayOf(0.0f, 1.0f, 0.0f)
     private var rad = floatArrayOf(0.0f, 0.0f)
 
-    private lateinit var cube:Cube
+    private lateinit var cube: Cube
 
     @Throws(InterruptedException::class)
     fun getVersionString(): String? {
@@ -83,14 +85,15 @@ class MyGLRender() : GLSurfaceView.Renderer {
     override fun onSurfaceCreated(gl: GL10, config: EGLConfig) {
         setOpenGl(gl, config)
         Assets.loadResource()
-        cube = Cube()
+        cube = Cube(width = 0.8f, depth = 1f, height = 0.6f, x = 0f, y = 0f, z = 0f)
+        cube.angles = floatArrayOf(20f, 30f, 45f)
     }
 
     override fun onDrawFrame(unused: GL10) {
         // Redraw background color
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT)
         cube.draw(projectionMatrix, viewMatrix)
-
+        cube.angleX += 1
 //        GLES30.glEnable(GLES30.GL_DEPTH_TEST)
 //        GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT or GLES30.GL_DEPTH_BUFFER_BIT)
 
